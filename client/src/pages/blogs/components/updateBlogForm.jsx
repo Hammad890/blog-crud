@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import useUpdateBlog from "../hooks/useEdit";
 import { useLocation } from 'react-router-dom';
@@ -10,9 +10,10 @@ const UpdateBlogForm = () => {
     const { blog } = location.state || {};
 
     const [isBlogLoaded, setIsBlogLoaded] = useState(false);
-    const { title, content, handleTitleChange, handleContentChange, handleSubmit, isLoading, error, updatedBlog } = useUpdateBlog(id, blog);
+    const { title, content, author, handleTitleChange, handleContentChange, handleAuthorChange, handleSubmit, isLoading, error, updatedBlog } = useUpdateBlog(id, blog);
+
     const onSuccess = (updatedBlog) => {
-        navigate(`/blogs/${updatedBlog.id}`);
+        navigate(`/blogs/${blog._id}`);
     };
 
     if (!isBlogLoaded) {
@@ -57,6 +58,20 @@ const UpdateBlogForm = () => {
                         />
                     </div>
 
+                    <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="author">
+                            Author
+                        </label>
+                        <input
+                            type="text"
+                            id="author"
+                            value={author}
+                            onChange={handleAuthorChange}
+                            className="w-full p-3 border border-gray-300 rounded-md"
+                            placeholder="Blog Author"
+                        />
+                    </div>
+
                     <button
                         type="submit"
                         className="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition duration-300"
@@ -68,12 +83,12 @@ const UpdateBlogForm = () => {
                 </form>
             )}
 
-            
             {updatedBlog && (
                 <div>
                     <h3>Updated Blog:</h3>
                     <p>Title: {updatedBlog.title}</p>
                     <p>Content: {updatedBlog.content}</p>
+                    <p>Author: {updatedBlog.author}</p>
                 </div>
             )}
         </div>

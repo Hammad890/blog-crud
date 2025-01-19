@@ -46,7 +46,6 @@ class BlogController {
         try {
             // TODO: Ensure req.body is of type Zod schema
             const body = req.body as UpdateBlogBody;
-            console.log(body)
             const blog = await this.service.updateBlog(req.params.id, body);
             console.log(blog)
             if (!blog) {

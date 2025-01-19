@@ -50,7 +50,6 @@ router.put(
   validateBody(updateBlogSchema),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      console.log(req)
       await new BlogController().updateBlog(req, res);
     } catch (err) {
       next(err);

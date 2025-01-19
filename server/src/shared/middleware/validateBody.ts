@@ -1,16 +1,18 @@
 import { Request, Response, NextFunction } from 'express';
+import { ZodSchema} from 'zod';
 
-const validateBody = (schema: any) => {
+const validateBody = (schema: ZodSchema) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    try {
-      // Perform schema validation
-      schema.validateSync(req.body); // Example, adjust as per your validation logic
-      next(); // If validation passes, proceed to next middleware
-    } catch (err: unknown) {
-      // Type assertion to 'any' or more specific error type
-      res.status(400).json({ error: (err as any).errors });
+    const result = schema.safeParse(req.body);
+
+    if (result.success) {
+      next(); // Proceed if validation passes
+    } else {
+      const errorMessages = result.error.errors.map((err) => err.message);
+      res.status(400).json({ error: errorMessages }); // Send detailed error messages
     }
   };
 };
 
 export default validateBody;
+
